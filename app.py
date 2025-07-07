@@ -54,31 +54,40 @@ def display_content(url):
         return "Unsupported content type"
 
 # Organize content into categories
-images = [url for url in urls if url.endswith((".jpg", ".png"))]
-videos = [url for url in urls if url.endswith((".mp4", ".webm"))]
-websites = [url for url in urls if url.endswith((".html", "/"))]
+sun_views = [urls[4], urls[5], urls[6], urls[7]]
+other_images = [urls[0], urls[8], urls[11]]
+other_videos = [urls[2], urls[3], urls[9], urls[10]]
+websites = [urls[12]]
+
 
 # Create the Gradio interface
 with gr.Blocks() as demo:
-    gr.Markdown("# Datanacci Earth Monitoring System")  # Application Name
+    gr.Markdown("# Datanacci Earth Monitoring System")
 
-    with gr.Tab("Images"):
-        with gr.Row():
-            for i, url in enumerate(images):
-                with gr.Column():
-                    gr.Image(display_content(url), label=f"Image {i+1}")
+    with gr.Tab("Sun Observations"):
+        for url in sun_views:
+            if url.endswith((".mp4", ".webm")):
+                gr.Markdown("<p style='font-family: Arial, sans-serif; font-size: 16px; text-align: center;'>Animated Solar Views</p>")
+                gr.Video(url)
+            else:
+                gr.Markdown("<p style='font-family: Arial, sans-serif; font-size: 16px; text-align: center;'>Animated Solar Views</p>")
+                gr.Image(display_content(url))
 
-    with gr.Tab("Videos"):
-        with gr.Row():
-            for i, url in enumerate(videos):
-                with gr.Column():
-                    gr.Video(url, label=f"Video {i+1}")
+
+    with gr.Tab("Seismic & Geophysical Data"):
+        for url in other_images:
+            gr.Markdown("<p style='font-family: Arial, sans-serif; font-size: 16px; text-align: center;'>Geophysical Charts</p>")
+            gr.Image(display_content(url))
+
+    with gr.Tab("Other Video Observations"):
+        for url in other_videos:
+            gr.Markdown("<p style='font-family: Arial, sans-serif; font-size: 16px; text-align: center;'>Various Video Observations</p>")
+            gr.Video(url)
 
     with gr.Tab("Websites"):
-        with gr.Row():
-            for i, url in enumerate(websites):
-                with gr.Column():
-                    gr.HTML(f'<iframe src="{url}" width="600" height="400"></iframe>', label=f"Website {i+1}")
+        for url in websites:
+            gr.HTML(f'<iframe src="{url}" width="600" height="400"></iframe>')
+
 
 
 demo.launch()
