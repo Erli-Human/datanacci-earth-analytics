@@ -59,29 +59,40 @@ geomagnetic_data = [urls[1], urls[2], urls[3]]
 sun_images = [urls[4], urls[5], urls[6], urls[7], urls[8], urls[9], urls[10], urls[11]]
 universe_console = [urls[12]]
 
-with gr.Blocks(css="body {background-color: black; color: silver;}") as demo:
-    gr.Markdown("# Datanacci Earth Monitoring System")
+with gr.Blocks(css="body {background-color: black; color: silver; font-family: monospace;}",
+              analytics_enabled=False) as demo:
 
-    with gr.Tab("Resonance Images"):
+    gr.Markdown("# Datanacci Earth Observation Station", scale=2, justify="center")
+    gr.Markdown("---", justify="center")  # Add a separator line
+
+    # Resonance Data
+    with gr.Column(scale=1):
+        gr.Markdown("## Resonance Signals", justify="left")
         for url in resonance_images:
-            gr.Image(display_content(url))
+            gr.Image(display_content(url), label="Resonance Image")
 
-    with gr.Tab("Geomagnetic Data"):
+    # Geomagnetic Data
+    with gr.Column(scale=1):
+        gr.Markdown("## Geomagnetic Activity", justify="left")
         for url in geomagnetic_data:
             if url.endswith((".mp4", ".webm")):
-                gr.Video(url)
+                gr.Video(url, label="Geomagnetic Video")
             else:
-                gr.Image(display_content(url))
+                gr.Image(display_content(url), label="Geomagnetic Image")
 
-    with gr.Tab("Sun Images"):
+    # Sun Observations
+    with gr.Column(scale=1):
+        gr.Markdown("## Solar Observations", justify="left")
         for url in sun_images:
             if url.endswith((".mp4", ".webm")):
-                gr.Video(url)
+                gr.Video(url, label="Solar Video")
             else:
-                gr.Image(display_content(url))
+                gr.Image(display_content(url), label="Solar Image")
 
-    with gr.Tab("Universe Console"):
+    # Universe Console
+    with gr.Column(scale=1):
+        gr.Markdown("## Universe Console", justify="left")
         for url in universe_console:
-            gr.HTML(f'<iframe src="{url}" width="600" height="400"></iframe>')
+            gr.HTML(f'<iframe src="{url}" width="100%" height="400px"></iframe>')
 
-demo.launch()
+demo.launch(share=False)
