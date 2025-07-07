@@ -6,19 +6,19 @@ import os
 
 # Define the URLs
 urls = [
-    "https://sosrff.tsu.ru/new/shm.jpg",
-    "https://volcanodiscovery.de/fileadmin/charts/seismic-activity-level.png",
-    "https://spaceweather.gfz-potsdam.de/fileadmin/rbm-forecast/Forecast_UTC_E_1_MeV_PA_50_latest_scatter_smooth_short.mp4",
-    "https://spaceweather.gfz.de/fileadmin/Aurora-Forecast/aurora_forecast_browser.webm",
-    "https://sdo.gsfc.nasa.gov/assets/img/latest/mpeg/latest_1024_0193.mp4",
-    "https://sdo.gsfc.nasa.gov/assets/img/latest/mpeg/latest_1024_0304.mp4",
-    "https://sdo.gsfc.nasa.gov/assets/img/latest/mpeg/latest_1024_0131.mp4",
-    "https://sdo.gsfc.nasa.gov/assets/img/latest/mpeg/latest_1024_0171.mp4",
-    "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_HMIIF.jpg",
-    "https://jsoc1.stanford.edu/data/hmi/movies/latest/Ic_flat_2d.mp4",
-    "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_HMIBC.jpg",
-    "https://jsoc1.stanford.edu/data/hmi/movies/latest/M_color_2d.mp4",
-    "https://www.solarsystemscope.com/"
+    "https://sosrff.tsu.ru/new/shm.jpg",  # Resonance
+    "https://volcanodiscovery.de/fileadmin/charts/seismic-activity-level.png", #Geomagnetic
+    "https://spaceweather.gfz-potsdam.de/fileadmin/rbm-forecast/Forecast_UTC_E_1_MeV_PA_50_latest_scatter_smooth_short.mp4", #Geomagnetic
+    "https://spaceweather.gfz.de/fileadmin/Aurora-Forecast/aurora_forecast_browser.webm", #Geomagnetic
+    "https://sdo.gsfc.nasa.gov/assets/img/latest/mpeg/latest_1024_0193.mp4", # Sun
+    "https://sdo.gsfc.nasa.gov/assets/img/latest/mpeg/latest_1024_0304.mp4", # Sun
+    "https://sdo.gsfc.nasa.gov/assets/img/latest/mpeg/latest_1024_0131.mp4", # Sun
+    "https://sdo.gsfc.nasa.gov/assets/img/latest/mpeg/latest_1024_0171.mp4", # Sun
+    "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_HMIIF.jpg", # Sun
+    "https://jsoc1.stanford.edu/data/hmi/movies/latest/Ic_flat_2d.mp4", # Sun
+    "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_HMIBC.jpg", # Sun
+    "https://jsoc1.stanford.edu/data/hmi/movies/latest/M_color_2d.mp4", # Sun
+    "https://www.solarsystemscope.com/" # Universe Console
 ]
 
 def infer_type(url):
@@ -53,41 +53,35 @@ def display_content(url):
     else:
         return "Unsupported content type"
 
-# Organize content into categories
-sun_views = [urls[4], urls[5], urls[6], urls[7]]
-other_images = [urls[0], urls[8], urls[11]]
-other_videos = [urls[2], urls[3], urls[9], urls[10]]
-websites = [urls[12]]
+# Categorize URLs
+resonance_images = [urls[0]]
+geomagnetic_data = [urls[1], urls[2], urls[3]]
+sun_images = [urls[4], urls[5], urls[6], urls[7], urls[8], urls[9], urls[10], urls[11]]
+universe_console = [urls[12]]
 
-
-# Create the Gradio interface
 with gr.Blocks() as demo:
     gr.Markdown("# Datanacci Earth Monitoring System")
 
-    with gr.Tab("Sun Observations"):
-        for url in sun_views:
-            if url.endswith((".mp4", ".webm")):
-                gr.Markdown("<p style='font-family: Arial, sans-serif; font-size: 16px; text-align: center;'>Animated Solar Views</p>")
-                gr.Video(url)
-            else:
-                gr.Markdown("<p style='font-family: Arial, sans-serif; font-size: 16px; text-align: center;'>Animated Solar Views</p>")
-                gr.Image(display_content(url))
-
-
-    with gr.Tab("Seismic & Geophysical Data"):
-        for url in other_images:
-            gr.Markdown("<p style='font-family: Arial, sans-serif; font-size: 16px; text-align: center;'>Geophysical Charts</p>")
+    with gr.Tab("Resonance Images"):
+        for url in resonance_images:
             gr.Image(display_content(url))
 
-    with gr.Tab("Other Video Observations"):
-        for url in other_videos:
-            gr.Markdown("<p style='font-family: Arial, sans-serif; font-size: 16px; text-align: center;'>Various Video Observations</p>")
-            gr.Video(url)
+    with gr.Tab("Geomagnetic Data"):
+        for url in geomagnetic_data:
+            if url.endswith((".mp4", ".webm")):
+                gr.Video(url)
+            else:
+                gr.Image(display_content(url))
 
-    with gr.Tab("Websites"):
-        for url in websites:
-            gr.HTML(f'<iframe src="{url}" width="600" height="400"></iframe>')
+    with gr.Tab("Sun Images"):
+        for url in sun_images:
+            if url.endswith((".mp4", ".webm")):
+                gr.Video(url)
+            else:
+                gr.Image(display_content(url))
 
-
+    with gr.Tab("Universe Console"):
+        for url in universe_console:
+            gr.HTML(f'<iframe src="{url}" width="600" height="400"></iframe')
 
 demo.launch()
