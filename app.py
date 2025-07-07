@@ -1,60 +1,84 @@
 import gradio as gr
-import pandas as pd
-import numpy as np
+import requests
+from PIL import Image
+import io
+import os
 
-# Placeholder data (replace with your actual data source)
-data = pd.DataFrame({
-    'System': ['Seismic Monitor A', 'Space Weather Station B', 'Satellite C', 'Environmental Sensor D'],
-    'Category': ['Seismic', 'Space Weather', 'Satellite Imagery', 'Environmental'],
-    'Status': ['Online', 'Online', 'Offline', 'Online'],
-    'Value': [4.5, 7.2, np.nan, 25.1]
-})
+# Define the URLs
+urls = [
+    "https://sosrff.tsu.ru/new/shm.jpg",
+    "https://volcanodiscovery.de/fileadmin/charts/seismic-activity-level.png",
+    "https://spaceweather.gfz-potsdam.de/fileadmin/rbm-forecast/Forecast_UTC_E_1_MeV_PA_50_latest_scatter_smooth_short.mp4",
+    "https://spaceweather.gfz.de/fileadmin/Aurora-Forecast/aurora_forecast_browser.webm",
+    "https://sdo.gsfc.nasa.gov/assets/img/latest/mpeg/latest_1024_0193.mp4",
+    "https://sdo.gsfc.nasa.gov/assets/img/latest/mpeg/latest_1024_0304.mp4",
+    "https://sdo.gsfc.nasa.gov/assets/img/latest/mpeg/latest_1024_0131.mp4",
+    "https://sdo.gsfc.nasa.gov/assets/img/latest/mpeg/latest_1024_0171.mp4",
+    "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_HMIIF.jpg",
+    "https://jsoc1.stanford.edu/data/hmi/movies/latest/Ic_flat_2d.mp4",
+    "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_HMIBC.jpg",
+    "https://jsoc1.stanford.edu/data/hmi/movies/latest/M_color_2d.mp4",
+    "https://www.solarsystemscope.com/"
+]
 
-def display_systems(category, system_type, query):
-    """
-    Filters and displays earth monitoring systems based on category, type, and query.
-    """
-    filtered_data = data.copy()
+def infer_type(url):
+    """Infers the type of content from the URL."""
+    if url.endswith(".jpg") or url.endswith(".png"):
+        return "Image", url
+    elif url.endswith(".mp4") or url.endswith(".webm"):
+        return "Video", url
+    elif url.endswith(".html") or url.endswith("/"):
+        return "Website", url
+    else:
+        return "Unknown", url
 
-    if category != "All":
-        filtered_data = filtered_data[filtered_data['Category'] == category]
+def display_content(url):
+    """Displays the content based on its type."""
+    content_type, actual_url = infer_type(url)
 
-    if system_type != "All":
-        # Add more specific filtering logic if needed
-        pass
+    if content_type == "Image":
+        try:
+            response = requests.get(actual_url, stream=True)
+            response.raise_for_status()  # Raise HTTPError for bad responses (4xx or 5xx)
+            image = Image.open(io.BytesIO(response.content))
+            return image
+        except requests.exceptions.RequestException as e:
+            return f"Error loading image: {e}"
 
-    if query:
-        filtered_data = filtered_data[filtered_data['System'].str.contains(query, case=False)]
+    elif content_type == "Video":
+        return actual_url  # Directly return the URL for Gradio to handle
 
-    return filtered_data
+    elif content_type == "Website":
+        return actual_url # Directly return the URL for Gradio to handle
+    else:
+        return "Unsupported content type"
 
+# Organize content into categories
+images = [url for url in urls if url.endswith((".jpg", ".png"))]
+videos = [url for url in urls if url.endswith((".mp4", ".webm"))]
+websites = [url for url in urls if url.endswith((".html", "/"))]
 
+# Create the Gradio interface
 with gr.Blocks() as demo:
-    gr.Markdown("# Earth Analytics Dashboard")
+    gr.Markdown("# Datanacci Earth Monitoring System")  # Application Name
 
-    with gr.Row():
-        category_dropdown = gr.Dropdown(
-            choices=["All", "Seismic", "Space Weather", "Satellite Imagery", "Environmental"],
-            label="Category",
-            value="All",
-        )
-        system_type_dropdown = gr.Dropdown(
-            choices=["All", "Monitor", "Station", "Sensor"],
-            label="System Type",
-            value="All",
-        )
-        query_textbox = gr.Textbox(label="Search")
+    with gr.Tab("Images"):
+        with gr.Row():
+            for i, url in enumerate(images):
+                with gr.Column():
+                    gr.Image(display_content(url), label=f"Image {i+1}")
 
-    submit_button = gr.Button("Submit")
+    with gr.Tab("Videos"):
+        with gr.Row():
+            for i, url in enumerate(videos):
+                with gr.Column():
+                    gr.Video(url, label=f"Video {i+1}")
 
-    output_dataframe = gr.DataFrame(headers=list(data.columns), row_count=(len(data)), col_count=(len(data.columns)))
-
-    submit_button.click(
-        fn=display_systems,
-        inputs=[category_dropdown, system_type_dropdown, query_textbox],
-        outputs=output_dataframe,
-    )
+    with gr.Tab("Websites"):
+        with gr.Row():
+            for i, url in enumerate(websites):
+                with gr.Column():
+                    gr.HTML(f'<iframe src="{url}" width="600" height="400"></iframe>', label=f"Website {i+1}")
 
 
-if __name__ == "__main__":
-    demo.launch()
+demo.launch()
