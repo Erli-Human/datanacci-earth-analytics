@@ -1,0 +1,168 @@
+{
+  "earthMonitoringSystems": {
+    "seismicEarthquake": [
+      {
+        "name": "GlobalQuake",
+        "url": "https://globalquake.org/",
+        "description": "Real-time global earthquake monitoring with interactive maps",
+        "type": "real-time",
+        "category": "seismic"
+      },
+      {
+        "name": "USGS Earthquake Hazards Program",
+        "url": "https://earthquake.usgs.gov/earthquakes/map/",
+        "description": "Live earthquake data and maps from US Geological Survey",
+        "type": "real-time",
+        "category": "seismic"
+      },
+      {
+        "name": "EMSC Real Time Seismicity",
+        "url": "https://www.emsc-csem.org/Earthquake/",
+        "description": "European-Mediterranean Seismological Centre real-time earthquake monitoring",
+        "type": "real-time",
+        "category": "seismic"
+      },
+      {
+        "name": "IRIS Station Monitor",
+        "url": "https://www.iris.edu/app/station_monitor/",
+        "description": "Seismic network monitoring from Incorporated Research Institutions for Seismology",
+        "type": "real-time",
+        "category": "seismic"
+      },
+      {
+        "name": "SeismicPortal",
+        "url": "https://seismicportal.eu/",
+        "description": "European seismic data portal",
+        "type": "real-time",
+        "category": "seismic"
+      }
+    ],
+    "spaceWeatherSolar": [
+      {
+        "name": "NOAA Space Weather Prediction Center",
+        "url": "https://www.swpc.noaa.gov/",
+        "description": "Real-time space weather data and forecasts",
+        "type": "real-time",
+        "category": "space-weather"
+      },
+      {
+        "name": "NASA Worldview",
+        "url": "https://worldview.earthdata.nasa.gov/",
+        "description": "Interactive satellite imagery and earth observation data",
+        "type": "real-time",
+        "category": "satellite-imagery"
+      }
+    ],
+    "weatherSatellite": [
+      {
+        "name": "NOAA GOES Imagery Viewer",
+        "url": "https://www.star.nesdis.noaa.gov/GOES/",
+        "description": "Real-time weather satellite imagery from GOES satellites",
+        "type": "real-time",
+        "category": "weather-satellite"
+      },
+      {
+        "name": "GOES Imagery Viewer (Alternative)",
+        "url": "https://www.goes.noaa.gov/",
+        "description": "NOAA GOES satellite imagery viewer",
+        "type": "real-time",
+        "category": "weather-satellite"
+      },
+      {
+        "name": "NWS Radar",
+        "url": "https://radar.weather.gov/",
+        "description": "National Weather Service radar imagery",
+        "type": "real-time",
+        "category": "weather-radar"
+      },
+      {
+        "name": "NOAA Earth in Real-Time",
+        "url": "https://www.nesdis.noaa.gov/imagery/interactive-maps/earth-real-time",
+        "description": "Interactive earth monitoring with real-time satellite data",
+        "type": "real-time",
+        "category": "satellite-imagery"
+      },
+      {
+        "name": "NOAA Satellite Images",
+        "url": "https://www.weather.gov/satellite",
+        "description": "National Weather Service satellite imagery",
+        "type": "real-time",
+        "category": "weather-satellite"
+      },
+      {
+        "name": "NASA Interactive Weather Satellite",
+        "url": "https://weather.ndc.nasa.gov/goes/",
+        "description": "Interactive weather satellite imagery viewers from NASA",
+        "type": "real-time",
+        "category": "weather-satellite"
+      }
+    ],
+    "fireEnvironmental": [
+      {
+        "name": "NASA FIRMS Fire Map",
+        "url": "https://firms.modaps.eosdis.nasa.gov/map/",
+        "description": "Real-time fire detection and monitoring using satellite data",
+        "type": "real-time",
+        "category": "fire-monitoring"
+      },
+      {
+        "name": "MODAPS LANCE",
+        "url": "https://lance.modaps.eosdis.nasa.gov/",
+        "description": "MODIS satellite data for near real-time earth monitoring",
+        "type": "real-time",
+        "category": "environmental"
+      }
+    ],
+    "europeanSpaceAgency": [
+      {
+        "name": "Copernicus Sentinel-2 Data",
+        "url": "https://dataspace.copernicus.eu/explore-data/data-collections/sentinel-data/sentinel-2",
+        "description": "European Space Agency Sentinel-2 satellite data",
+        "type": "archive-realtime",
+        "category": "satellite-imagery"
+      },
+      {
+        "name": "ESA Sentinel-2",
+        "url": "https://www.esa.int/Applications/Observing_the_Earth/Copernicus/Sentinel-2",
+        "description": "European Space Agency Sentinel-2 mission information",
+        "type": "information",
+        "category": "satellite-imagery"
+      },
+      {
+        "name": "ESA Sentinel Missions",
+        "url": "https://www.esa.int/Applications/Observing_the_Earth/Copernicus/The_Sentinel_missions",
+        "description": "Overview of European Space Agency Sentinel missions",
+        "type": "information",
+        "category": "satellite-imagery"
+      }
+    ],
+    "additionalResources": [
+      {
+        "name": "NASA MODIS Near Real-Time Data",
+        "url": "https://www.earthdata.nasa.gov/data/instruments/modis/near-real-time-data",
+        "description": "MODIS instrument near real-time earth observation data",
+        "type": "real-time",
+        "category": "environmental"
+      }
+    ]
+  },
+  "metadata": {
+    "totalSystems": 16,
+    "categories": [
+      "seismic",
+      "space-weather", 
+      "weather-satellite",
+      "weather-radar",
+      "satellite-imagery",
+      "fire-monitoring",
+      "environmental"
+    ],
+    "types": [
+      "real-time",
+      "archive-realtime",
+      "information"
+    ],
+    "lastUpdated": "2025-07-07",
+    "description": "Comprehensive collection of online earth monitoring systems for dashboard integration"
+  }
+}
