@@ -59,8 +59,8 @@ geomagnetic_data = [urls[1], urls[2], urls[3]]
 sun_images = [urls[4], urls[5], urls[6], urls[7], urls[8], urls[9], urls[10], urls[11]]
 universe_console = [urls[12]]
 
-with gr.Blocks(css="body {background-color: black; color: silver;} h1 {color: silver;} .tab-label {color: silver !important;}") as demo:
-    gr.Markdown("# Datanacci Earth Monitoring System", scale=1)
+with gr.Blocks(css="body {background-color: black; color: silver;}") as demo:
+    gr.Markdown("# Datanacci Earth Monitoring System")
 
     with gr.Tab("Resonance Images"):
         for url in resonance_images:
@@ -82,6 +82,6 @@ with gr.Blocks(css="body {background-color: black; color: silver;} h1 {color: si
 
     with gr.Tab("Universe Console"):
         for url in universe_console:
-            gr.HTML(f'<iframe src="{url}" width="600" height="400"></iframe')
+            gr.HTML(f'<iframe src="{url}" width="600" height="400"></iframe>')
 
 demo.launch()
