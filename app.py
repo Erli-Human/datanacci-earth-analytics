@@ -3,6 +3,7 @@ import requests
 from PIL import Image
 import io
 import os
+import random
 
 # Define the URLs
 urls = [
@@ -59,10 +60,37 @@ geomagnetic_data = [urls[1], urls[2], urls[3]]
 sun_images = [urls[4], urls[5], urls[6], urls[7], urls[8], urls[9], urls[10], urls[11]]
 universe_console = [urls[12]]
 
+def star_background(width, height):
+    """Generates a star background animation as a sequence of images."""
+    images = []
+    for _ in range(30):  # Generate 30 frames for a short animation
+        image = Image.new("RGB", (width, height), "black")
+        pixels = image.load()
+        for i in range(width):
+            for j in range(height):
+                if random.random() < 0.01:  # Adjust probability for star density
+                    r = random.randint(100, 255)
+                    g = random.randint(100, 255)
+                    b = random.randint(100, 255)
+                    pixels[i, j] = (r, g, b)
+        images.append(image)
+    return images
+
 with gr.Blocks(css="body {background-color: black; color: silver; font-family: monospace;}",
               analytics_enabled=False) as demo:
 
-    gr.Markdown("# Datanacci Earth Observation Station", scale=2, justify="center")
+    # Generate star background animation
+    background_images = star_background(800, 600)
+
+    # Define a function to update the background image
+    def update_background(i):
+        return background_images[i % len(background_images)]
+
+    # Use a Timer to cycle through the background images
+    timer = gr.Timer(interval=100, value=0, label="Background Animation")
+    timer.change(update_background, inputs=timer, outputs=[])
+
+    gr.Markdown("# Datanacci Earth Observation Station", justify="center")
     gr.Markdown("---", justify="center")  # Add a separator line
 
     # Resonance Data
