@@ -1,15 +1,12 @@
-import gradio as gr
 import requests
 from PIL import Image
-from io import BytesIO
-import math
 
-# List of URLs for images and videos
+# Define a list of URLs
 urls = [
     "https://sosrff.tsu.ru/new/shm.jpg",
     "https://volcanodiscovery.de/fileadmin/charts/seismic-activity-level.png",
     "https://spaceweather.gfz-potsdam.de/fileadmin/rbm-forecast/Forecast_UTC_E_1_MeV_PA_50_latest_scatter_smooth_short.mp4",
-    "https://spaceweather.gfz-de/fileadmin/Aurora-Forecast/aurora_forecast_browser.webm",
+    "https://spaceweather.gfz.de/fileadmin/Aurora-Forecast/aurora_forecast_browser.webm",
     "https://sdo.gsfc.nasa.gov/assets/img/latest/mpeg/latest_1024_0193.mp4",
     "https://sdo.gsfc.nasa.gov/assets/img/latest/mpeg/latest_1024_0304.mp4",
     "https://sdo.gsfc.nasa.gov/assets/img/latest/mpeg/latest_1024_0131.mp4",
@@ -17,7 +14,7 @@ urls = [
     "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_HMIIF.jpg",
     "https://jsoc1.stanford.edu/data/hmi/movies/latest/Ic_flat_2d.mp4",
     "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_HMIBC.jpg",
-    "https://jsoc1.stanford.edu/data/hmi/movies/latest/M_color_2d.mp4"
+    "https://jsoc1.stanford.edu/data/hmi/movies/latest/M_color_2d.mp4",
 ]
 
 # Define a dictionary to hold the URLs for each type of media
