@@ -1,7 +1,9 @@
 import requests
 from PIL import Image
+import gr
+import math
 
-# Define a list of URLs
+# List of URLs
 urls = [
     "https://sosrff.tsu.ru/new/shm.jpg",
     "https://volcanodiscovery.de/fileadmin/charts/seismic-activity-level.png",
@@ -17,7 +19,7 @@ urls = [
     "https://jsoc1.stanford.edu/data/hmi/movies/latest/M_color_2d.mp4",
 ]
 
-# Define a dictionary to hold the URLs for each type of media
+# Dictionary to hold URLs for each media type
 media_types = {
     'images': [],
     'videos': []
@@ -27,6 +29,7 @@ def load_media(url):
     """Loads media from a URL."""
     try:
         response = requests.get(url)
+        
         if not response.ok:
             print(f"Error loading media from {url}: {response.status_code}")
             return None, "Failed to retrieve"
