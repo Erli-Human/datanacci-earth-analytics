@@ -8,7 +8,7 @@ urls = [
     "https://sosrff.tsu.ru/new/shm.jpg",  # Resonance
     "https://volcanodiscovery.de/fileadmin/charts/seismic-activity-level.png",
     "https://spaceweather.gfz-potsdam.de/fileadmin/rbm-forecast/Forecast_UTC_E_1_MeV_PA_50_latest_scatter_smooth_short.mp4",
-    "https://spaceweather gfz.de/fileadmin/Aurora-Forecast/aurora_forecast_browser.webm",
+    "https://spaceweather.gfz.de/fileadmin/Aurora-Forecast/aurora_forecast_browser.webm",
     "https://sdo.gsfc.nasa.gov/assets/img/latest/mpeg/latest1080.jpg",
     "https://jsoc1.stanford.edu/data/hmi/movies/latest/Ic_flat_2d.mp4",
     "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_HMIIF.jpg",
