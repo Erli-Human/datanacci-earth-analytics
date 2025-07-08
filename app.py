@@ -1,9 +1,10 @@
 import requests
 from PIL import Image
-import gr
+import gradio as gr
 import math
+import io
 
-# List of URLs
+# List of URLs (unchanged)
 urls = [
     "https://sosrff.tsu.ru/new/shm.jpg",
     "https://volcanodiscovery.de/fileadmin/charts/seismic-activity-level.png",
@@ -26,32 +27,29 @@ media_types = {
 }
 
 def load_media(url):
-    """Loads media from a URL."""
     try:
         response = requests.get(url)
-        
         if not response.ok:
             print(f"Error loading media from {url}: {response.status_code}")
-            return None, "Failed to retrieve"
-    
+            return None, f"Status code: {response.status_code}"
+            
     except requests.exceptions.RequestException as e:
         print(f"An error occurred: {e}")
-        return None, f"An error occurred with the request: {e}"
-
+        return None, "Request failed"
+    
     try:
         if url.endswith(('.jpg', '.jpeg', '.png', '.gif')):
             image = Image.open(io.BytesIO(response.content))
             return image
         elif url.endswith(('.mp4', '.webm')):
-            return url  # Return the URL for video
+            return url  # Return the video URL directly
     except Exception as e:
         print(f"Failed to load media from {url}: {e}")
-        return None, f"Failed to load media: {e}"
+        return None, f"Loading error: {e}"
 
 def create_columns():
     global media_types
     
-    # Populate images and videos lists
     for i in range(len(urls)):
         if urls[i].endswith(('.jpg', '.jpeg', '.png', '.gif')):
             media_types['images'].append(urls[i])
@@ -60,28 +58,27 @@ def create_columns():
 
 create_columns()
 
-# Create the grid with separate columns
+# Create the Gradio interface
 demo = gr.Blocks()
 grid_columns = 4
-grid_rows = -(-math.ceil(len(media_types['images']) / grid_columns))  # Calculate the number of rows needed
+grid_rows = -(-math.ceil(len(media_types['images']) / grid_columns))
 
-for i in range(grid_rows):
-    row = []
-    
-    for j in range(grid_columns):
-        if media_types['images']:
-            image_url = media_types['images'][i * grid_columns + j]
-            response, result = load_media(image_url)
-            
-            if response:
-                row.append(gr.Image(image=response))
-        
-        elif len(media_types['videos']) > 0:
-            video_url = media_types['videos'][i * grid_columns + j]
-            row.append(gr.Video(url=video_url))
-    
-    if len(row) == grid_columns:
-        demo.add_row(*row)
+with demo:
+    for i in range(grid_rows):
+        with gr.Row():
+            for j in range(grid_columns):
+                index = i * grid_columns + j
+                if index < len(media_types['images']):
+                    image_url = media_types['images'][index]
+                    try:
+                        image = load_media(image_url)
+                        if image is not None:
+                            gr.Image(value=image, label=f"Image {index+1}")
+                    except Exception as e:
+                        print(f"Failed to render image at index {index}: {e}")
+                elif index - len(media_types['images']) < len(media_types['videos']):
+                    video_url = media_types['videos'][index - len(media_types['images'])]
+                    gr.Video(value=video_url, label=f"Video {index+1}")
 
-# Launch the application
+# Launch the app
 demo.launch()
