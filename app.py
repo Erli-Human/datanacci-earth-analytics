@@ -5,7 +5,7 @@ import io
 
 # Define the URLs
 urls = [
-    "https://sosrff.tsu.ru/new/shm.jpg",  
+    "https://sosrff.tsu.ru/new/shm.jpg",  # Resonance
     "https://volcanodiscovery.de/fileadmin/charts/seismic-activity-level.png",
     "https://spaceweather.gfz-potsdam.de/fileadmin/rbm-forecast/Forecast_UTC_E_1_MeV_PA_50_latest_scatter_smooth_short.mp4",
     "https://spaceweather gfz.de/fileadmin/Aurora-Forecast/aurora_forecast_browser.webm",
@@ -34,33 +34,36 @@ def create_iframe_html(url, width, height):
     return f'<iframe src="{url}" width="{width}" height="{height}" frameborder="0" allowfullscreen></iframe>'
 
 with gr.Blocks() as demo:
-    grid = gr.Grid(systems=[1, 3])
+    grid_columns = 2
+    grid_rows = -(-3 // grid_columns)  # Calculate the number of rows needed
     
-    # Resonance
-    resonance_image = load_media(urls[0])
-    if resonance_image:
-        grid.add(Image(resonance_image))
-        
-    # Geomagnetic Activity (Seismic)
-    geomagnetic_image = load_media(urls[2])
-    if geomagnetic_image:
-        grid.add(Image(geomagnetic_image))
+    grid = []
     
-    # Aurora Forecast
-    aurora_image = load_media(urls[1])
-    if aurora_image:
-        grid.add(Image(aurora_image))
+    for i in range(grid_rows):
+        row = []
         
-    # SDO 1080p
-    sdo_image_1 = load_media(urls[3])
-    if sdo_image_1:
-        grid.add(Image(sdo_image_1))
+        for j in range(grid_columns):
+            if i < len(urls) and (j == 0 or j == grid_columns - 1):  # Check if this is the first column
+                url_index = i * grid_columns + j
+                if url_index >= len(urls):
+                    break
+                
+                image = load_media(urls[url_index])
+                
+                if image:
+                    row.append(gr.Image(image))
+            elif j != 0:  # Add a video or another image to this row
+                for k in range(3):  # Up to three videos per row
+                    url = urls[i * grid_columns + j]
+                    
+                    if url.endswith('.mp4') or url.endswith('.webm'):  # Check the URL type
+                        row.append(gr.Video(url))
+                    else:
+                        image = load_media(url)
+                        
+                        if image:
+                            row.append(gr.Image(image))
         
-    # Videos (SOLAR, JSOC)
-    video_url_1 = urls[4]
-    gr.Video(load_media(video_url_1), label="Solar Dynamics Observatory")
-    
-    video_url_2 = urls[7]
-    gr.Video(load_media(video_url_2), label="JSOC 1")
+        grid.append(gr.Row(*row))  # Add each row to the grid
 
 demo.launch()
