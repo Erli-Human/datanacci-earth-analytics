@@ -31,16 +31,24 @@ media_types = {
 def load_media(url):
     """Loads media from a URL."""
     try:
-        response = requests.get(url, stream=True)
-        response.raise_for_status()
+        response = requests.get(url)
+        if not response.ok:
+            print(f"Error loading media from {url}: {response.status_code}")
+            return None, "Failed to retrieve"
+    
     except requests.exceptions.RequestException as e:
-        print(f"Error loading media from {url}: {e}")
-        return None
-    if url.endswith(('.jpg', '.jpeg', '.png', '.gif')):
-        image = Image.open(io.BytesIO(response.content))
-        return image
-    elif url.endswith(('.mp4', '.webm')):
-        return url  # Return the URL for video
+        print(f"An error occurred: {e}")
+        return None, f"An error occurred with the request: {e}"
+
+    try:
+        if url.endswith(('.jpg', '.jpeg', '.png', '.gif')):
+            image = Image.open(io.BytesIO(response.content))
+            return image
+        elif url.endswith(('.mp4', '.webm')):
+            return url  # Return the URL for video
+    except Exception as e:
+        print(f"Failed to load media from {url}: {e}")
+        return None, f"Failed to load media: {e}"
 
 def create_columns():
     global media_types
@@ -48,8 +56,8 @@ def create_columns():
     for i in range(len(urls)):
         if urls[i].endswith(('.jpg', '.jpeg', '.png', '.gif')):
             media_types['images'].append(urls[i])
-        else:
-            media_types['videos'].append(urls[i])
+        elif url := media_types['videos'][i]:
+            media_types['videos'].remove(url)  # Move the video URL to this list for later processing
 
 create_columns()
 
@@ -64,7 +72,10 @@ for i in range(grid_rows):
     for j in range(grid_columns):
         if media_types['images']:
             image_url = media_types['images'][i * grid_columns + j]
-            row.append(gr.Image(image=load_media(image_url)))
+            response, result = load_media(image_url)
+            
+            if response:
+                row.append(gr.Image(image=response))
         
         elif len(media_types['videos']) > 0:
             video_url = media_types['videos'][i * grid_columns + j]
