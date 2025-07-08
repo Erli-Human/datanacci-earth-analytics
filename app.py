@@ -54,4 +54,4 @@ with gr.Blocks() as demo:
 
 # Launch the interface
 if __name__ == "__main__":
-    demo.launch(share=False, server_timeout=600)
+    demo.launch(share=False)
