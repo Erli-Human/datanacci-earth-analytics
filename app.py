@@ -1,25 +1,23 @@
 import gradio as gr
-from PIL import Image
 import requests
-import io
+from PIL import Image
+from io import BytesIO
 import math
 
-# Define the URLs
+# List of URLs for images and videos
 urls = [
-    "https://sosrff.tsu.ru/new/shm.jpg",  # Resonance
-    "https://volcanodiscovery.de/fileadmin/charts/seismic-activity-level.png",  # Geomagnetic
+    "https://sosrff.tsu.ru/new/shm.jpg",
+    "https://volcanodiscovery.de/fileadmin/charts/seismic-activity-level.png",
     "https://spaceweather.gfz-potsdam.de/fileadmin/rbm-forecast/Forecast_UTC_E_1_MeV_PA_50_latest_scatter_smooth_short.mp4",
-    "https://spaceweather.gfz.de/fileadmin/Aurora-Forecast/aurora_forecast_browser.webm",  # Aurora
-    "https://sdo.gsfc.nasa.gov/assets/img/latest/mpeg/latest1080.jpg",  # SDO Image
-    "https://sso.org/images/events/nasional-dagang.png",  # SSO Image
-    "https://spaceweather.gfz.de/fileadmin/rbm-forecast/Forecast_UTC_E_1_MeV_PA_50_latest_scatter_smooth_short.mp4",
-    "https://jsoc1.stanford.edu/data/hmi/movies/latest/Ic_flat_2d.mp4",  # JSOC 1 Image
-    "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_HMIIF.jpg",  # SDO HMI Image
-    "https://jsoc1.stanford.edu/data/hmi/movies/latest/M_color_2d.mp4",  # JSOC 1 Video
-    "https://sso.org/images/events/20220830.png",  # SSO Image
-    "https://spaceweather.gfz.de/fileadmin/Aurora-Forecast/aurora_forecast_browser2.webm",  # Aurora Forecast 2
-    "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_HMIBC.jpg",  # SDO HMIC Image
-    "https://sso.org/images/events/20220825.png",  # SSO Image
+    "https://spaceweather.gfz-de/fileadmin/Aurora-Forecast/aurora_forecast_browser.webm",
+    "https://sdo.gsfc.nasa.gov/assets/img/latest/mpeg/latest_1024_0193.mp4",
+    "https://sdo.gsfc.nasa.gov/assets/img/latest/mpeg/latest_1024_0304.mp4",
+    "https://sdo.gsfc.nasa.gov/assets/img/latest/mpeg/latest_1024_0131.mp4",
+    "https://sdo.gsfc.nasa.gov/assets/img/latest/mpeg/latest_1024_0171.mp4",
+    "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_HMIIF.jpg",
+    "https://jsoc1.stanford.edu/data/hmi/movies/latest/Ic_flat_2d.mp4",
+    "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_HMIBC.jpg",
+    "https://jsoc1.stanford.edu/data/hmi/movies/latest/M_color_2d.mp4"
 ]
 
 # Define a dictionary to hold the URLs for each type of media
@@ -53,11 +51,12 @@ def load_media(url):
 def create_columns():
     global media_types
     
+    # Populate images and videos lists
     for i in range(len(urls)):
         if urls[i].endswith(('.jpg', '.jpeg', '.png', '.gif')):
             media_types['images'].append(urls[i])
-        elif url := media_types['videos'][i]:
-            media_types['videos'].remove(url)  # Move the video URL to this list for later processing
+        elif urls[i].endswith(('.mp4', '.webm')):
+            media_types['videos'].append(urls[i])
 
 create_columns()
 
@@ -84,4 +83,5 @@ for i in range(grid_rows):
     if len(row) == grid_columns:
         demo.add_row(*row)
 
+# Launch the application
 demo.launch()
