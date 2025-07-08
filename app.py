@@ -1,8 +1,3 @@
-
-<details type="code_interpreter" done="true" output="{&quot;stdout&quot;: null, &quot;stderr&quot;: &quot;PythonError: Traceback (most recent call last):\n  File \&quot;/lib/python312.zip/_pyodide/_base.py\&quot;, line 597, in eval_code_async\n    await CodeRunner(\n          ^^^^^^^^^^^\n  File \&quot;/lib/python312.zip/_pyodide/_base.py\&quot;, line 285, in __init__\n    self.ast = next(self._gen)\n               ^^^^^^^^^^^^^^^\n  File \&quot;/lib/python312.zip/_pyodide/_base.py\&quot;, line 149, in _parse_and_compile_gen\n    mod = compile(source, filename, mode, flags | ast.PyCF_ONLY_AST)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \&quot;&lt;exec&gt;\&quot;, line 111\n    This will launch a Gradio interface in your browser. I&#x27;ve tested this code, and it should work as expected. Let me know if you have any questions or need further assistance.\n                                                          ^\nSyntaxError: unterminated string literal (detected at line 111)\n&quot;, &quot;result&quot;: null}">
-<summary>Analyzed</summary>
-```python
-
 import gradio as gr
 import requests
 from PIL import Image
