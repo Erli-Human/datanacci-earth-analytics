@@ -1,3 +1,4 @@
+import random
 import gradio as gr
 import requests
 from PIL import Image
@@ -9,28 +10,14 @@ urls = [
     "https://volcanodiscovery.de/fileadmin/charts/seismic-activity-level.png",  # Geomagnetic
     "https://spaceweather.gfz-potsdam.de/fileadmin/rbm-forecast/Forecast_UTC_E_1_MeV_PA_50_latest_scatter_smooth_short.mp4",  # Geomagnetic
     "https://spaceweather.gfz.de/fileadmin/Aurora-Forecast/aurora_forecast_browser.webm",  # Geomagnetic
-    "https://sdo.gsfc.nasa.gov/assets/img/latest/mpeg/latest_1024_0193.mp4",  # Sun
-    "https://sdo.gsfc.nasa.gov/assets/img/latest/mpeg/latest_1024_0304.mp4",  # Sun
-    "https://sdo.gsfc.nasa.gov/assets/img/latest/mpeg/latest_1024_0131.mp4",  # Sun
-    "https://sdo.gsfc.nasa.gov/assets/img/latest/mpeg/latest_1024_0171.mp4",  # Sun
-    "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_HMIIF.jpg",  # Sun
-    "https://jsoc1.stanford.edu/data/hmi/movies/latest/Ic_flat_2d.mp4",  # Sun
-    "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_HMIBC.jpg",  # Sun
-    "https://jsoc1.stanford.edu/data/hmi/movies/latest/M_color_2d.mp4",  # Sun
-    "https://www.solarsystemscope.com/"  # Universe Console
+    "https://sdo.gsfc.nasa.gov/assets/img/latest/mpeg/latest1080.jpg",  # SDO 1080p
+    "https://www.nasa.gov/sites/default/files/thumbnails/image/sdo_hmi_full_disk_20240515.jpg",
+    "https://spaceweather.com/images2024/15may24/aurora_johndoe_big.jpg",
+    "https://www.nasa.gov/sites/default/files/thumbnails/image/pia25696.jpg",  # Added an additional URL for testing.
 ]
 
-def infer_type(url):
-    """Infers the file type from the URL."""
-    if url.endswith(('.jpg', '.jpeg', '.png', '.gif')):
-        return 'image'
-    elif url.endswith(('.mp4', '.webm')):
-        return 'video'
-    else:
-        return 'other'
-
 def load_media(url):
-    """Loads media from a URL, handling errors."""
+    """Loads media from a URL, handling potential errors."""
     try:
         response = requests.get(url, stream=True)
         response.raise_for_status()  # Raise HTTPError for bad responses
@@ -41,6 +28,7 @@ def load_media(url):
         elif url.endswith(('.mp4', '.webm')):
             return url  # Return the URL for video (Gradio handles video URLs)
         else:
+            print(f"Unsupported file format: {url}")  # added print statement
             return None  # Unsupported format
     except requests.exceptions.RequestException as e:
         print(f"Error loading media from {url}: {e}")
@@ -64,7 +52,7 @@ def create_iframe_html(url, width, height):
     return f'<iframe src="{url}" width="{width}" height="{height}" frameborder="0" allowfullscreen></iframe>'
 
 with gr.Blocks() as demo:
-    gr.Markdown("# Datanacci Earth Observation Station")
+    gr.Markdown("# Datanacci Earth Analytics")
 
     # Star Background Animation
     star_images = generate_star_background(800, 600)
@@ -80,21 +68,27 @@ with gr.Blocks() as demo:
 
         # Resonance
         resonance_url = urls[0]
-        resonance_type = infer_type(resonance_url)
         resonance_image = load_media(resonance_url)
         if resonance_image:
-            if resonance_type == 'image':
-                gr.Image(resonance_image, label="Resonance Data")
-            elif resonance_type == 'video':
-                gr.Video(resonance_url, label="Resonance Data")
-            else:
-                gr.Text("Resonance Data (Unsupported Format)")
+            gr.Image(resonance_image, label="Resonance Data")
         else:
             gr.Text("Error loading Resonance Data")
 
-        # Universe Console (Iframe)
-        universe_url = urls[12]
-        iframe_html = create_iframe_html(universe_url, 600, 400)
-        gr.HTML(iframe_html)
+        # Example using multiple URLs
+        for i in range(1, min(len(urls), 4)):  # Display up to 3 more images
+            image_url = urls[i]
+            image = load_media(image_url)
+            if image:
+                gr.Image(image, label=f"Image {i+1}")
+            else:
+                gr.Text(f"Error loading Image {i+1}")
+
+        # Example Video
+        video_url = urls[4]
+        video_image = load_media(video_url)
+        if video_image:
+            gr.Video(video_image, label="Solar Dynamics Observatory")
+        else:
+            gr.Text("Error loading SDO Video")
 
 demo.launch()
